@@ -2,7 +2,7 @@ from utils import (read_video,
                    save_video)
 from trackers import(PlayerTracker,
                      BallTracker)
-
+import cv2
 from ultralytics import YOLO
 import os
 
@@ -30,6 +30,11 @@ def main():
     output_video_frames = player_tracker.draw_boxes(video_frames, player_detections)
     #Draw Ball Bounding Boxes
     output_video_frames = ball_tracker.draw_boxes(output_video_frames, ball_detections)
+
+
+    #Write number of frame:
+    for i, frame in enumerate(output_video_frames):
+        cv2.putText(frame, f"frame: {i}", (20, 60), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
 
     #Save Video
     ##OBS: QUERO SALVAR EM MP4 DPS
