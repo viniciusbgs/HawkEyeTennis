@@ -4,7 +4,8 @@ from trackers import(PlayerTracker,
                      BallTracker)
 import cv2
 from ultralytics import YOLO
-import os
+from court_line_detector import CourtLineDetector
+
 
 def main():
         
@@ -25,11 +26,18 @@ def main():
     ball_detections = ball_tracker.detect_frames(video_frames,
                                                     read_from_stub=True,
                                                     stub_path='tracker_stubs/ball_dict.pkl')
+    
+    #Court Line Detector
+    court_model_path = 'models/keypoints_model.pth'
+    court_line_detector = CourtLineDetector(court_model_path)
+    court_keypoints = court_line_detector.predict(video_frames[0])
 
     #Draw Player Bounding Boxes
     output_video_frames = player_tracker.draw_boxes(video_frames, player_detections)
     #Draw Ball Bounding Boxes
     output_video_frames = ball_tracker.draw_boxes(output_video_frames, ball_detections)
+    #Draw Court Line Keypoints
+    output_video_frames = court_line_detector.draw_keypoints_on_video(output_video_frames, court_keypoints)
 
 
     #Write number of frame:
