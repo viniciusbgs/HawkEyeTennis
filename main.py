@@ -27,6 +27,9 @@ def main():
                                                     read_from_stub=True,
                                                     stub_path='tracker_stubs/ball_dict.pkl')
     
+    #Interpolate Ball Positions
+    ball_detections = ball_tracker.interpolate_ball_positions(ball_detections) 
+
     #Court Line Detector
     court_model_path = 'models/keypoints_model.pth'
     court_line_detector = CourtLineDetector(court_model_path)
