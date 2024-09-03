@@ -1,10 +1,45 @@
 from ultralytics import YOLO
 import cv2
 import pickle
+import sys 
+sys.path.append('../')
+from utils import get_center_of_bb, get_distance
 
 class PlayerTracker:
     def __init__(self, model_path):
         self.model = YOLO(model_path)
+
+    
+    def choose_and_filter_players(self, player_dict_list, court_keypoints):
+        player_detections_first_frame = player_dict_list[0]
+        choosen_players = self.choose_players(court_keypoints, player_detections_first_frame)
+        filtered_player_dict_list = []
+        for player_dict in player_dict_list:
+            filtered_player_dict = {track_id: bbox for track_id, bbox in player_dict.items() if track_id in choosen_players}
+            filtered_player_dict_list.append(filtered_player_dict) 
+        return filtered_player_dict_list
+
+
+    def choose_players(self, keypoints, player_dict):
+        distances = []
+        for track_id, bbox in player_dict.items():
+            player_center = get_center_of_bb(bbox)
+            min_distance = float('inf')
+            
+            for i in range(0, len(keypoints), 2):
+                court_keypoint = (keypoints[i], keypoints[i+1])
+                distance = get_distance(player_center, court_keypoint)
+                if distance < min_distance:
+                    min_distance = distance
+            distances.append((track_id, min_distance))
+
+        #sort by distance
+        distances.sort(key=lambda x: x[1])
+        #choose the two closest players
+        chosen_players = [distances[0][0], distances[1][0]]
+        
+        return chosen_players
+
 
     def detect_frames(self, frames, read_from_stub=False, stub_path=None):
 
