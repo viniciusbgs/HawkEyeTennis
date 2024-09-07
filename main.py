@@ -5,6 +5,7 @@ from trackers import(PlayerTracker,
 import cv2
 from ultralytics import YOLO
 from court_line_detector import CourtLineDetector
+from mini_court import MiniCourt
 
 
 def main():
@@ -17,6 +18,8 @@ def main():
     #Create Player and Ball Trackers
     player_tracker = PlayerTracker(model_path='yolov8x')
     ball_tracker = BallTracker(model_path='models/last.pt')
+
+
 
     #Detect Players 
     player_detections = player_tracker.detect_frames(video_frames, 
@@ -38,12 +41,18 @@ def main():
     #Choose and Filter Players
     player_detections = player_tracker.choose_and_filter_players(player_detections, court_keypoints)
 
+    #Create Mini Court
+    mini_court = MiniCourt(video_frames[0])
+
     #Draw Player Bounding Boxes
     output_video_frames = player_tracker.draw_boxes(video_frames, player_detections) 
     #Draw Ball Bounding Boxes
     output_video_frames = ball_tracker.draw_boxes(output_video_frames, ball_detections)
     #Draw Court Line Keypoints
     output_video_frames = court_line_detector.draw_keypoints_on_video(output_video_frames, court_keypoints)
+
+    #Draw Mini Court
+    output_video_frames = mini_court.draw_mini_court(output_video_frames)
 
 
     #Write number of frame:
