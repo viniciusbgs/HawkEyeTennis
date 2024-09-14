@@ -56,6 +56,9 @@ def main():
     #Draw Mini Court
     output_video_frames = mini_court.draw_mini_court(output_video_frames)
 
+    #Draw Foot Positions
+    output_video_frames = mini_court.draw_foot_positions(output_video_frames, player_detections)
+
     #Write number of frame:
     for i, frame in enumerate(output_video_frames):
         cv2.putText(frame, f"frame: {i}", (20, 60), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2, cv2.LINE_AA)
