@@ -3,7 +3,7 @@ import cv2
 import pickle
 import sys 
 sys.path.append('../')
-from utils import get_center_of_bb, get_distance
+from utils import get_center_of_bbox, measure_distance
 
 class PlayerTracker:
     def __init__(self, model_path):
@@ -19,25 +19,23 @@ class PlayerTracker:
             filtered_player_dict_list.append(filtered_player_dict) 
         return filtered_player_dict_list
 
-
-    def choose_players(self, keypoints, player_dict):
+    def choose_players(self, court_keypoints, player_dict):
         distances = []
         for track_id, bbox in player_dict.items():
-            player_center = get_center_of_bb(bbox)
+            player_center = get_center_of_bbox(bbox)
+
             min_distance = float('inf')
-            
-            for i in range(0, len(keypoints), 2):
-                court_keypoint = (keypoints[i], keypoints[i+1])
-                distance = get_distance(player_center, court_keypoint)
+            for i in range(0,len(court_keypoints),2):
+                court_keypoint = (court_keypoints[i], court_keypoints[i+1])
+                distance = measure_distance(player_center, court_keypoint)
                 if distance < min_distance:
                     min_distance = distance
             distances.append((track_id, min_distance))
-
-        #sort by distance
-        distances.sort(key=lambda x: x[1])
-        #choose the two closest players
-        chosen_players = [distances[0][0], distances[1][0]]
         
+        # sorrt the distances in ascending order
+        distances.sort(key = lambda x: x[1])
+        # Choose the first 2 tracks
+        chosen_players = [distances[0][0], distances[1][0]]
         return chosen_players
 
 
