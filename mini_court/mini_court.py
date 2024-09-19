@@ -147,23 +147,23 @@ class MiniCourt():
             output_frames.append(frame)
         return output_frames
     
-    def draw_foot_positions(self, frames, player_detection):
+    # def draw_foot_positions(self, frames, player_detection):
 
-        output_frames = []
-        for frame, player in zip(frames, player_detection):
-            # Get foot position of player 1
-            foot_position = get_foot_position(player[1])
-            foot_position = (int(foot_position[0]), int(foot_position[1]))
-            # Get foot position of player 2
-            foot_position2 = get_foot_position(player[2])
-            foot_position2 = (int(foot_position2[0]), int(foot_position2[1]))
+    #     output_frames = []
+    #     for frame, player in zip(frames, player_detection):
+    #         # Get foot position of player 1
+    #         foot_position = get_foot_position(player[1])
+    #         foot_position = (int(foot_position[0]), int(foot_position[1]))
+    #         # Get foot position of player 2
+    #         foot_position2 = get_foot_position(player[2])
+    #         foot_position2 = (int(foot_position2[0]), int(foot_position2[1]))
 
-            # Draw foot position of players on mini court
-            cv2.circle(frame, foot_position, 5, (0, 255, 0), -1)
-            cv2.circle(frame, foot_position2, 5, (0, 255, 0), -1)
+    #         # Draw foot position of players on mini court
+    #         cv2.circle(frame, foot_position, 5, (0, 255, 0), -1)
+    #         cv2.circle(frame, foot_position2, 5, (0, 255, 0), -1)
 
-            output_frames.append(frame)
-        return output_frames
+    #         output_frames.append(frame)
+    #     return output_frames
 
 
     def get_start_point_of_mini_court(self):

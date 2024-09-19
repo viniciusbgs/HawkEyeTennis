@@ -71,12 +71,7 @@ def main():
     output_video_frames = mini_court.draw_points_on_mini_court(output_video_frames,ball_mini_court_detections, color=(0,255,255))    
 
     #Draw Foot Positions
-    output_video_frames = mini_court.draw_foot_positions(output_video_frames, player_detections)
-
-    # Convert positions to mini court positions
-    player_mini_court_detections, ball_mini_court_detections = mini_court.convert_bounding_boxes_to_mini_court_coordinates(player_detections, 
-                                                                                                          ball_detections,
-                                                                                                          court_keypoints)
+    # output_video_frames = mini_court.draw_foot_positions(output_video_frames, player_detections)
 
     player_stats_data = [{
         'frame_num':0,
